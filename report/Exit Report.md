@@ -87,7 +87,7 @@ Voor de analyse is gekozen voor een correlatietest en een chi-kwadraat toets omd
 
 Om in te schatten of de variabelen met elkaar samen hangen, dient de bovenstaande tabel geanalyseerd te worden. In het model werd gesteld dat er geen sprake is van correlatie bij een waarde van 0 en hoe hoger de waarde des te hoger de correlatie. Van de drie variabelen kan geconcludeerd worden dat type woning de krachtigste correlatie heeft, dus dat de type woning de meeste invloed heeft op het gas en elektrisiteits verbruik. Deze is echter nog erg laag voor een correlatie. 
 
-### 2. Chi-square
+### 2. Chi-kwadraat toets
 
 | variabele | gas | elektriciteit |
 | ------ | --- | ------------- |
