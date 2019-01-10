@@ -75,7 +75,7 @@ In de analyse wordt de functie simulate.p.value = TRUE gebruikt, omdat de datase
 
 
 ##	Solution Architecture
-<Architecture of the solution, describe clearly whether this was actually implemented or a proposed architecture. Include diagram and relevant details for reproducing similar architecture. Include details of why this architecture was chosen versus other architectures that were considered, if relevant\>
+Voor de analyse is gekozen voor een correlatietest en een chi-kwadraat toets omdat de dataset bestaat uit onafhankelijke waarnemingen op nominaal niveau. 
 
 ### 1. Correlatietest
 
