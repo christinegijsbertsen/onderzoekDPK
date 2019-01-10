@@ -119,8 +119,7 @@ In de casus gaat het om het verbruik van gas en elektriciteit en welke variabele
 Niet van toepassing.
 
 ### What's unique about this project, specific challenges
-<Specific issues or setup, unique things, specific challenges that had to be addressed during the engagement and how that was accomplished\> 
-Het was een relatief klein dataset met verschillende waardes, waardoor het meeste werk vooral in de dataprocessing zat. Dit was nuttig omdat door 
+Het was een relatief klein dataset met verschillende waardes, waardoor het meeste werk vooral in de dataprocessing zat. Dit was nuttig omdat door dit onderzoek we kennis gemaakt het met de analyze technieken van data analyse. 
 
 ##	Links
 Repository: https://github.com/christinegijsbertsen/onderzoekDPK 
