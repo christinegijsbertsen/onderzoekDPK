@@ -7,8 +7,7 @@ Customer: <Liander\>
 Team Members: <Bart Bosveld, Yuri Gietman en Christine Gijsbertsen\>
 
 ##	Overview
-
-<Executive summary of entire solution, brief non-technical overview\>
+Voor Liander hebben wij een onderzoek gedaan naar de relatie tussen het verbruik van gas en elektriciteit in relatie tot het bouwjaar van een huis, de gezinssamenstelling en het type huis. Door te onderzoeken of er een relatie tussen deze variabelen is kan er een advies worden gegeven aan Liander om verbeteringen te maken in hun business model.  
 
 
 ##	Business Domain
@@ -19,14 +18,17 @@ Liander is een netbeheer dat leidingen en kabels aanlegt. Daarnaast beheert zij 
 Liander heeft al sinds 1940 data gemeten op gebied van gas en elektriciteit. Ze hebben deze data maar hebben nog niet inzichtelijk welke campagne het beste zal werken, gericht op een variabele uit de meeting. Dit onderzoek is er op gericht in hoeverre de variabelen van invloed zijn op het gas en elektriciteitsverbruik. 
 
 ##	Data Processing
-<Schema of original datasets, how data was processed, final input data schema for model\>
-We hebben twee datasets gebruikt en dezen samengevoegd. De datasets meten het gas en electriciteit vanaf 1940 tot en met heden. De eerste dataset gaat over rijtjeshuizen en het tweede dataset gaat over twee-onder-een-kap woningen. De data is vervolgens per bouwjaar en per gezinssamenstelling opgeslagen. Bijvoorbeeld hieronder gecategoriseerd in bouwjaar en type gezin, in dit voorbeeld een jong alleenstaande vrouw. 
+We hebben twee datasets gebruikt en dezen samengevoegd. 
+
+### Originele datasets
+De datasets meten het gas en electriciteit vanaf 1940 tot en met heden. De eerste dataset gaat over rijtjeshuizen en het tweede dataset gaat over twee-onder-een-kap woningen. De data is vervolgens per bouwjaar en per gezinssamenstelling opgeslagen. Bijvoorbeeld hieronder gecategoriseerd in bouwjaar en type gezin, in dit voorbeeld een jong alleenstaande vrouw. 
 
 | voor 1940 | 1940 t/m 1959 | 1960 t/m 1969 | 1970 t/m 1979 | 1980 t/m 1989 | 1990 t/m 1999 | 2000 t/m heden |
 |---------- | ------------- | ------------- | ------------- | ------------- | ------------- | -------------- |
 | E 3.487 | E 3.342 | E 3.782 | E 3.676 | E 3.394 | E 3.369 | E 2.998 |
 | G 2.212 | G 1.722 | G 1.677 | G 1.574 | G 1.416 | G 1.380 | G 1.054 | 
 
+### Geconstrueerde dataset
 Wij hebben de twee datasets samengevoegd tot een door het verbruik te meten variabelen (kolommem) type woning, bouwjaar, gezinssamenstelling, gasverbruik en elekticiteitsverbruik. 
 Bijvoorbeeld, 
 
@@ -34,7 +36,7 @@ Bijvoorbeeld,
 | -------- | ------------------- | ---------- | ------------- | --- |
 | > 1940 | JA | rijtje | 3.487 | 2.212 | 
 
-Om de data efficient te verwerken hebben we de data categorisch opgeslagen. Hierbij gebruiken we de volgende afkortingen. 
+In onze samengevoegde dataset gebruiken we de volgende afkortingen. 
 
 | Afkorting | uitleg |
 | --------- | ------ |
@@ -47,8 +49,8 @@ Om de data efficient te verwerken hebben we de data categorisch opgeslagen. Hier
 | MA | middelbaar allenstaand |
 | OA | ouder alleenstaand |
 
+### Fouten en missende waarden
 Daarnaast zaten er in één tabel de volgende fouten, in de tabel gezin met jonge en oudere kinderen, bij het elektriciteitsverbruik. 
-
 
 | voor 1940 | 1940 t/m 1959 | 1960 t/m 1969 | 1970 t/m 1979 | 1980 t/m 1989 | 1990 t/m 1999 | 2000 t/m heden |
 |---------- | ------------- | ------------- | ------------- | ------------- | ------------- | -------------- |
@@ -57,19 +59,53 @@ Daarnaast zaten er in één tabel de volgende fouten, in de tabel gezin met jong
 De laatste getallen zijn versprongen naar de volgende kolom. Dit is in het 'nieuwe' dataset goed gezet.
 Daarnaast zijn van de ouderen alleenstaand vanaf 2000 t/m heden geen variabelen gemeten. 
 
+Bovendien hebben we in de volgende cellen een aantal spaties tussen de waardes verwijderd: D33, G13 en G42 en miste er een aantal waardes in de laatste rij van de (gecontrueerde) dataset. 
+
+### Implementatie - preprocessing
+Om een statistische analyse te kunnen uitvoeren, hebben we de dataset ingelezen en vervolgens de kolommen bouwjaar, type woning en gezinssamenstelling categorisch opgeslagen (implementatiedetails zijn te vinden in code/analysis.R).
+Daarnaast hebben we vanwege de missende waarden de complete laatste rij van de geconstrueerde dataset niet meegenomen in de analyse.
+
 ##	Modeling, Validation
 <Modeling techniques used, validation results, details of how validation conducted\>
+Het dataset bevat onafhankelijke waardes van nominale waarde. We hebben eerste getest of de waardes: bouwjaar, type woning en gezinssamenstelling correleren met elektriciteit of gas. In deze test wordt er gekeken naar de kracht van het verband, bij een correlatie van 0 is er geen verband, hoe hoger de waarde hoe krachtiger het verband. 
+In de analyse wordt de functie complete.obs gebruikt, deze maken de paren compleet. 
+
+Omdat correlatie geen causatie is hebben we vervolgens een chi-kwadraat test uitgevoerd. Bij dezen chi-kwadraat hebben getest of twee verdelingen van elkaar verschillen. In onze casus wordt er gekozen voor een onafhankelijkheidstest. Hierin wordt onderzocht of de simultane verdeling bestaat uit twee onafhankelijke. 
+Hierbij wordt gekeken naar de P waardes. Een P >  0.05, dan is er geen significant verband tussen de categorische variabelen. 
+Een P < 0.05, dan is er wel een significant verband tussen de categorische variabelen. 
+In de analyse wordt de functie simulate.p.value = TRUE gebruikt, omdat de dataset te klein is voor de analyse en daardoor steeds een foutmelding gaf. Deze functie geeft extra waardes waardoor beter gemeten kan worden. 
+
 
 ##	Solution Architecture
 <Architecture of the solution, describe clearly whether this was actually implemented or a proposed architecture. Include diagram and relevant details for reproducing similar architecture. Include details of why this architecture was chosen versus other architectures that were considered, if relevant\>
 
+### 1. Correlatietest
+
+| variabele | gas | elektriciteit |
+| ------ | --- | ------------- |
+| bouwjaar | -0.5875286 | 0.251412 |
+| gezinssamenstelling | -0.1015118 | -0.6203572 |
+| type woning | 0.5721096 |  0.3312101 |
+
+In het model werd gesteld dat er geen sprake is van correlatie bij een waarde van 0 en hoe hoger de waarde des te hoger de correlatie. Van de drie variabelen kan geconcludeerd worden dat type woning de krachtigste correlatie heeft, dus dat de type woning de meeste invloed heeft op het gas en elektrisiteits verbruik. Deze is echter nog erg laag voor een  correlatie. 
+
+### 2. Chi-square
+
+| variabele | gas | elektriciteit |
+| ------ | --- | ------------- |
+| bouwjaar | 0.02199 | 0.4213 |
+| type woning | 0.4898 | 0.7486|
+| gezinssamenstelling | 0.9995 | 0.8526 |
+
+Het enige significate verband tussen de variabelen is bij de variabelen bouwjaar en gas P: 0.02199 < 0.05. Er is dus een significant verband tussen het type bouwjaar van het huis en het gas verbruik. Bij de andere resulaten wordt er geen significant verband gemeten aangezien deze allemaal >0.05 zijn. 
+
 ##	Benefits
 	
-###	Company Benefit (internal only. Double check if you want to share this with your customer)
-<What did our company gain from this engagement? ROI, revenue,  etc\>
+### Company Benefit (internal only. Double check if you want to share this with your customer)
+Nu Liander weet dat er een significant verband is tussen het gas verbruik en het bouwjaar van het huis, kan zijn hier op anticiperen door haar marketing campagene hierop af te stemmen.
 
-###	Customer Benefit
-What is the benefit (ROI, savings, productivity gains etc)  for the customer? If just POC, what is estimated ROI? If exact metrics are not available, why does it have impact for the customer?\>
+### Customer Benefit
+Als de klant weet dat het bouwjaar van een huis van invloed is op het gasverbruik, kan zij beter onderzoeken of gas wel een juiste oplossing voor haar is en ze wellicht beter elektrischiteit kan gebruiken. 
 
 ##	Learnings
 
@@ -77,26 +113,21 @@ What is the benefit (ROI, savings, productivity gains etc)  for the customer? If
 <Learnings around the customer engagement process\>
 
 ### Data science / Engineering
-<Learnings related to data science/engineering, tips/tricks, etc\>
-
+Door dit project hebben we geleerd hoe met R-studie te werken en hierin data-analyses uit te voeren. 
 
 ### Domain
-<Learnings around the business domain, \>
-
+In de casus gaat het om het verbruik van gas en elektriciteit en welke variabele daar van invloed op kunnen zijn laat zien waar je op moet letten als je verbruik van gas en elektriciteit interpreteerd. Daarnaast geeft een beeld in wat Liander doet. 
 
 ### Product
 <Learnings around the products and services utilized in the solution \>
 
-###	What's unique about this project, specific challenges
-<Specific issues or setup, unique things, specific challenges that had to be addressed during the engagement and how that was accomplished\>
+### What's unique about this project, specific challenges
+<Specific issues or setup, unique things, specific challenges that had to be addressed during the engagement and how that was accomplished\> 
+Het was een relatief klein dataset met verschillende waardes, waardoor het meeste werk vooral in de dataprocessing zat. Dit was nuttig omdat door 
 
 ##	Links
-<Links to published case studies, etc.; Link to git repository where all code sits\>
+Repository: https://github.com/christinegijsbertsen/onderzoekDPK 
 
-
-##	Next Steps
- 
-<Next steps. These should include milestones for follow-ups and who 'owns' this action. E.g. Post- Proof of Concept check-in on status on 12/1/2016 by X, monthly check-in meeting by Y, etc.\>
 
 ## Appendix
 <Other material that seems relevant – try to keep non-appendix to <20 pages but more details can be included in appendix if needed\>
