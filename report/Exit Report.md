@@ -1,6 +1,5 @@
-# Exit Report of Project <X> for Customer <Y>
+# Exit Report of Project <X>  for Liander <Y>
 
-Instructions: Template for exit criteria for data science projects. This is concise document that includes an overview of the entire project, including details of each stage and learning. If a section isn't applicable (e.g. project didn't include a ML model), simply mark that section as "Not applicable". Suggested length between 5-20 pages. Code should mostly be within code repository (not in this document).
 
 Customer: <Liander\>
 
@@ -21,7 +20,7 @@ Liander heeft al sinds 1940 data gemeten op gebied van gas en elektriciteit. Ze 
 We hebben twee datasets gebruikt en dezen samengevoegd. 
 
 ### Originele datasets
-De datasets meten het gas en electriciteit vanaf 1940 tot en met heden. De eerste dataset gaat over rijtjeshuizen en het tweede dataset gaat over twee-onder-een-kap woningen. De data is vervolgens per bouwjaar en per gezinssamenstelling opgeslagen. Bijvoorbeeld hieronder gecategoriseerd in bouwjaar en type gezin, in dit voorbeeld een jong alleenstaande vrouw. 
+De datasets meten het gas en electriciteit vanaf 1940 tot en met heden (zie data: LianderKV01012018.xlsx & LianderKV01012018.xlsx 2). De eerste dataset gaat over rijtjeshuizen en het tweede dataset gaat over twee-onder-een-kap woningen. De data is vervolgens per bouwjaar en per gezinssamenstelling opgeslagen. Bijvoorbeeld hieronder gecategoriseerd in bouwjaar en type gezin, in dit voorbeeld een jong alleenstaande vrouw. 
 
 | voor 1940 | 1940 t/m 1959 | 1960 t/m 1969 | 1970 t/m 1979 | 1980 t/m 1989 | 1990 t/m 1999 | 2000 t/m heden |
 |---------- | ------------- | ------------- | ------------- | ------------- | ------------- | -------------- |
@@ -29,7 +28,7 @@ De datasets meten het gas en electriciteit vanaf 1940 tot en met heden. De eerst
 | G 2.212 | G 1.722 | G 1.677 | G 1.574 | G 1.416 | G 1.380 | G 1.054 | 
 
 ### Geconstrueerde dataset
-Wij hebben de twee datasets samengevoegd tot een door het verbruik te meten variabelen (kolommem) type woning, bouwjaar, gezinssamenstelling, gasverbruik en elekticiteitsverbruik. 
+Wij hebben de twee datasets samengevoegd tot een door het verbruik te meten variabelen (kolommem) type woning, bouwjaar, gezinssamenstelling, gasverbruik en elekticiteitsverbruik (zie data: Liander.csv). 
 Bijvoorbeeld, 
 
 | Bouwjaar | gezinssamenstelling |type woning | elektriciteit | gas |
@@ -66,11 +65,10 @@ Om een statistische analyse te kunnen uitvoeren, hebben we de dataset ingelezen 
 Daarnaast hebben we vanwege de missende waarden de complete laatste rij van de geconstrueerde dataset niet meegenomen in de analyse.
 
 ##	Modeling, Validation
-<Modeling techniques used, validation results, details of how validation conducted\>
 Het dataset bevat onafhankelijke waardes van nominale waarde. We hebben eerste getest of de waardes: bouwjaar, type woning en gezinssamenstelling correleren met elektriciteit of gas. In deze test wordt er gekeken naar de kracht van het verband, bij een correlatie van 0 is er geen verband, hoe hoger de waarde hoe krachtiger het verband. 
 In de analyse wordt de functie complete.obs gebruikt, deze maken de paren compleet. 
 
-Omdat correlatie geen causatie is hebben we vervolgens een chi-kwadraat test uitgevoerd. Bij dezen chi-kwadraat hebben getest of twee verdelingen van elkaar verschillen. In onze casus wordt er gekozen voor een onafhankelijkheidstest. Hierin wordt onderzocht of de simultane verdeling bestaat uit twee onafhankelijke. 
+Omdat correlatie geen causatie is hebben we vervolgens een chi-kwadraat test uitgevoerd. Bij dezen chi-kwadraat hebben getest of twee verdelingen van elkaar verschillen. In onze casus wordt er gekozen voor een onafhankelijkheidstest. Hierin wordt onderzocht of de simultane verdeling bestaat uit twee onafhankelijke. In de test voor dit onderzoek zullen de variabelen: bouwjaar, gezinssamenstelling en type woning getoetst worden of ze significant samenhangen met het gebruik van gas of/en elextriciteit. 
 Hierbij wordt gekeken naar de P waardes. Een P >  0.05, dan is er geen significant verband tussen de categorische variabelen. 
 Een P < 0.05, dan is er wel een significant verband tussen de categorische variabelen. 
 In de analyse wordt de functie simulate.p.value = TRUE gebruikt, omdat de dataset te klein is voor de analyse en daardoor steeds een foutmelding gaf. Deze functie geeft extra waardes waardoor beter gemeten kan worden. 
@@ -87,7 +85,7 @@ In de analyse wordt de functie simulate.p.value = TRUE gebruikt, omdat de datase
 | gezinssamenstelling | -0.1015118 | -0.6203572 |
 | type woning | 0.5721096 |  0.3312101 |
 
-In het model werd gesteld dat er geen sprake is van correlatie bij een waarde van 0 en hoe hoger de waarde des te hoger de correlatie. Van de drie variabelen kan geconcludeerd worden dat type woning de krachtigste correlatie heeft, dus dat de type woning de meeste invloed heeft op het gas en elektrisiteits verbruik. Deze is echter nog erg laag voor een  correlatie. 
+Om in te schatten of de variabelen met elkaar samen hangen, dient de bovenstaande tabel geanalyseerd te worden. In het model werd gesteld dat er geen sprake is van correlatie bij een waarde van 0 en hoe hoger de waarde des te hoger de correlatie. Van de drie variabelen kan geconcludeerd worden dat type woning de krachtigste correlatie heeft, dus dat de type woning de meeste invloed heeft op het gas en elektrisiteits verbruik. Deze is echter nog erg laag voor een correlatie. 
 
 ### 2. Chi-square
 
@@ -97,7 +95,7 @@ In het model werd gesteld dat er geen sprake is van correlatie bij een waarde va
 | type woning | 0.4898 | 0.7486|
 | gezinssamenstelling | 0.9995 | 0.8526 |
 
-Het enige significate verband tussen de variabelen is bij de variabelen bouwjaar en gas P: 0.02199 < 0.05. Er is dus een significant verband tussen het type bouwjaar van het huis en het gas verbruik. Bij de andere resulaten wordt er geen significant verband gemeten aangezien deze allemaal >0.05 zijn. 
+Het enige significate verband tussen de variabelen is bij de variabelen bouwjaar en gas P: 0.02199 < 0.05. Er is dus een significant verband tussen het type bouwjaar van het huis en het gas verbruik. Bij de andere resulaten wordt er geen significant verband gemeten aangezien deze allemaal >0.05 zijn en zijn deze variabelen dus afhankelijk. Deze test is belangrijk omdat het inzicht geeft in de verbanden tussen de variabelen en met deze resultaten kan Liander ook beter inspelen op de afhankelijke veriabelen
 
 ##	Benefits
 	
@@ -108,9 +106,8 @@ Nu Liander weet dat er een significant verband is tussen het gas verbruik en het
 Als de klant weet dat het bouwjaar van een huis van invloed is op het gasverbruik, kan zij beter onderzoeken of gas wel een juiste oplossing voor haar is en ze wellicht beter elektrischiteit kan gebruiken. 
 
 ##	Learnings
-
-### 	Project Execution
-<Learnings around the customer engagement process\>
+### Project Execution
+Niet van toepassing.
 
 ### Data science / Engineering
 Door dit project hebben we geleerd hoe met R-studie te werken en hierin data-analyses uit te voeren. 
@@ -119,7 +116,7 @@ Door dit project hebben we geleerd hoe met R-studie te werken en hierin data-ana
 In de casus gaat het om het verbruik van gas en elektriciteit en welke variabele daar van invloed op kunnen zijn laat zien waar je op moet letten als je verbruik van gas en elektriciteit interpreteerd. Daarnaast geeft een beeld in wat Liander doet. 
 
 ### Product
-<Learnings around the products and services utilized in the solution \>
+Niet van toepassing.
 
 ### What's unique about this project, specific challenges
 <Specific issues or setup, unique things, specific challenges that had to be addressed during the engagement and how that was accomplished\> 
@@ -130,5 +127,6 @@ Repository: https://github.com/christinegijsbertsen/onderzoekDPK
 
 
 ## Appendix
-<Other material that seems relevant – try to keep non-appendix to <20 pages but more details can be included in appendix if needed\>
+Tilburg University, (z.d.). Crosstab. Geraadpleegd van https://www.tilburguniversity.edu/nl/studenten/studie/colleges/spsshelpdesk/edesk/crosstab/
+SPSS Handboek, (z.d.). Correlatie analyse - Hoe het werkt. Geraadpleegd van https://spsshandboek.nl/correlatie/ 
 
