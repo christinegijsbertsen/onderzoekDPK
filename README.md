@@ -4,6 +4,6 @@ Onderzoek uitgevoerd door Christine Gijsbertsen (612775), Bart Bosveld (585390) 
 ### Structuur
     .
     ├── data                    # Originele datasets en de dataset die we zelf hebben geconstrueerd (Liander.csv)
-    ├── code                    # Statistische analyse (chi-square & correlatie) in R
+    ├── code                    # Statistische analyse (correlatie & chi-kwadraat analyse) in R
     ├── report                  # Reports: Project Charter & Exit Report
     └── README.md
