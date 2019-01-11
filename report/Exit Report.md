@@ -13,7 +13,6 @@ Voor Liander hebben wij een onderzoek gedaan naar de relatie tussen het verbruik
 Liander is een netbeheer dat leidingen en kabels aanlegt. Daarnaast beheert zij het energie netwerk in verschillende regio's. 
 
 ##	Business Problem
-<Business problem and exact use case(s), why it matters\>
 Liander heeft al sinds 1940 data gemeten op gebied van gas en elektriciteit. Ze hebben deze data maar hebben nog niet inzichtelijk welke campagne het beste zal werken, gericht op een variabele uit de meeting. Dit onderzoek is er op gericht in hoeverre de variabelen van invloed zijn op het gas en elektriciteitsverbruik. 
 
 ##	Data Processing
@@ -68,11 +67,18 @@ Daarnaast hebben we vanwege de missende waarden de complete laatste rij van de g
 Het dataset bevat onafhankelijke waardes van nominale waarde. We hebben eerste getest of de waardes: bouwjaar, type woning en gezinssamenstelling correleren met elektriciteit of gas. In deze test wordt er gekeken naar de kracht van het verband, bij een correlatie van 0 is er geen verband, hoe hoger de waarde hoe krachtiger het verband. 
 In de analyse wordt de functie complete.obs gebruikt, deze maken de paren compleet. 
 
-Omdat correlatie geen causatie is hebben we vervolgens een chi-kwadraat test uitgevoerd. Bij dezen chi-kwadraat hebben getest of twee verdelingen van elkaar verschillen. In onze casus wordt er gekozen voor een onafhankelijkheidstest. Hierin wordt onderzocht of de simultane verdeling bestaat uit twee onafhankelijke. In de test voor dit onderzoek zullen de variabelen: bouwjaar, gezinssamenstelling en type woning getoetst worden of ze significant samenhangen met het gebruik van gas of/en elextriciteit. 
+Omdat correlatie geen causatie is hebben we vervolgens een chi-kwadraat test uitgevoerd. In onze casus wordt er gekozen voor een onafhankelijkheidstest. Hierin wordt onderzocht in welke mate het gebruik van gas en elektriciteit afhankelijk is van de variabelen bouwjaar, type woning en gezinssamenstelling.
+
+De uitkomst van de Chi-kwadraat toets geeft de p waarde.
+In dit geval is de p waarde kleiner dan 5%.
+
+In het geval van de volgende Ho en H1 hypotheses
+H0: Het gebruik van gas en elektriciteit zijn allemaal afhankelijk van de variablen: bouwjaar, type woning en gezinssamenstelling. 
+H1: Het gebruik van gas en elektriciteit zijn niet allemaal afhankelijk van de variablen: bouwjaar, type woning en gezinssamenstelling. 
+
 Hierbij wordt gekeken naar de P waardes. Een P >  0.05, dan is er geen significant verband tussen de categorische variabelen. 
 Een P < 0.05, dan is er wel een significant verband tussen de categorische variabelen. 
 In de analyse wordt de functie simulate.p.value = TRUE gebruikt, omdat de dataset te klein is voor de analyse en daardoor steeds een foutmelding gaf. Deze functie geeft extra waardes waardoor beter gemeten kan worden. 
-
 
 ##	Solution Architecture
 Voor de analyse is gekozen voor een correlatietest en een chi-kwadraat toets omdat de dataset bestaat uit onafhankelijke waarnemingen op nominaal niveau. 
@@ -95,15 +101,15 @@ Om in te schatten of de variabelen met elkaar samen hangen, dient de bovenstaand
 | type woning | 0.4898 | 0.7486|
 | gezinssamenstelling | 0.9995 | 0.8526 |
 
-Het enige significate verband tussen de variabelen is bij de variabelen bouwjaar en gas P: 0.02199 < 0.05. Er is dus een significant verband tussen het type bouwjaar van het huis en het gas verbruik. Bij de andere resulaten wordt er geen significant verband gemeten aangezien deze allemaal >0.05 zijn en zijn deze variabelen dus afhankelijk. Deze test is belangrijk omdat het inzicht geeft in de verbanden tussen de variabelen en met deze resultaten kan Liander ook beter inspelen op de afhankelijke veriabelen
+Het enige significate verband tussen de variabelen is bij de variabelen: bouwjaar en gas P: 0.02199 < 0.05. Het gebruik van gas is dus afhankelijk van het bouwjaar van het huis. Hierbij verwerpen we de 0 hypothese en nemen we hypothese 1 aan, omdat dit uitwijst dat niet alle variabelen afhankelijk zijn. Bij de andere resulaten wordt er geen significant verband gemeten aangezien deze allemaal >0.05 zijn en zijn deze variabelen dus onafhankelijk. Deze test is belangrijk omdat het inzicht geeft in de verbanden tussen de variabelen en met deze resultaten kan Liander ook beter inspelen op de afhankelijke veriabelen.
 
 ##	Benefits
 	
 ### Company Benefit (internal only. Double check if you want to share this with your customer)
-Nu Liander weet dat er een significant verband is tussen het gas verbruik en het bouwjaar van het huis, kan zijn hier op anticiperen door haar marketing campagene hierop af te stemmen.
+Nu Liander weet dat er een significant verband is tussen het gas verbruik en het bouwjaar van het huis, kan zijn hier op anticiperen door haar marketing campagene hierop af te stemmen. 
 
 ### Customer Benefit
-Als de klant weet dat het bouwjaar van een huis van invloed is op het gasverbruik, kan zij beter onderzoeken of gas wel een juiste oplossing voor haar is en ze wellicht beter elektrischiteit kan gebruiken. 
+Als de klant weet dat het bouwjaar van een huis van invloed is op het gasverbruik, kan zij beter onderzoeken of gas wel een juiste oplossing voor haar is en ze wellicht beter elektrischiteit kan gebruiken.  
 
 ##	Learnings
 ### Project Execution
